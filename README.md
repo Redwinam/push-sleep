@@ -32,16 +32,15 @@
 2. 在企业微信中创建机器人，并获取 Webhook 地址
 3. 在其他需要的地方，例如 NodeRED 使用以下格式发送消息：
    ```curl
-   curl
    curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=YOUR_KEY' \
-   -H 'Content-Type: application/json' \
-   -d '
-   {
-   "msgtype": "text",
-   "text": {
-   "content": "瑞诺家-睡觉模式"
-   }
-   }'
+       -H 'Content-Type: application/json' \
+       -d '
+           {
+               "msgtype": "text",
+               "text": {
+                   "content": "瑞诺家-睡觉模式"
+               }
+           }'
    ```
 
 ## 注意事项
@@ -54,6 +53,7 @@
 ## 许可证
 
 Made by 千啾略 [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans)
+
 Thanks to Cursor -> Claude 3.5 Sonnet for helping me 瞬间写完了这个 README.md and make this script.
 
 ## 免责声明
