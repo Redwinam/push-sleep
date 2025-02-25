@@ -23,7 +23,6 @@ function smartClick(buttonText, maxRetry = 3, interval = 1000) {
     }
 
     if (i < maxRetry - 1) {
-      // 最后一次不需要sleep
       sleep(interval);
       log("未找到'" + buttonText + "'按钮，等待后重试...");
     }
@@ -32,9 +31,33 @@ function smartClick(buttonText, maxRetry = 3, interval = 1000) {
   return false;
 }
 
+// 尝试执行模式切换
+function switchMode(modeName) {
+  try {
+    // 先尝试直接点击模式按钮（假设已在"我的"页面）
+    if (smartClick(modeName)) {
+      log("直接切换到" + modeName + "模式成功");
+      return true;
+    }
+
+    // 如果直接点击失败，尝试完整流程
+    log("直接切换失败，尝试完整流程");
+    launchApp("瑞诺家智能家居");
+    log("已启动应用");
+
+    // 智能点击按钮序列
+    if (smartClick("我的")) {
+      return smartClick(modeName);
+    }
+    return false;
+  } catch (error) {
+    log("执行过程出错: " + error);
+    return false;
+  }
+}
+
 // 监听通知事件
 events.onNotification(function (notification) {
-  // 获取额外信息中的实际文本
   let extras = notification.extras;
   if (extras) {
     let androidText = extras.get("android.text");
@@ -56,18 +79,7 @@ events.onNotification(function (notification) {
 
       // 在新线程中执行UI操作
       threads.start(function () {
-        try {
-          // 启动应用
-          launchApp("瑞诺家智能家居");
-          log("已启动应用");
-
-          // 智能点击按钮序列
-          if (smartClick("我的")) {
-            smartClick(modeName);
-          }
-        } catch (error) {
-          log("执行过程出错: " + error);
-        }
+        switchMode(modeName);
       });
     }
   }
